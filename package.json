@@ -1,0 +1,27 @@
+{
+  "name": "crypto",
+  "version": "1.0.0",
+  "description": "암복호화 모음",
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "connect-flash": "^0.1.1",
+    "connect-multiparty": "^2.2.0",
+    "cookie-parser": "^1.4.6",
+    "crypto": "^1.0.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.18.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/node": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "nodemon": "^2.0.20"
+  }
+}
