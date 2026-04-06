@@ -33,7 +33,7 @@ var aesRouter = require('./routes/aes');
 
 app.use('/aes', aesRouter);
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.render('main', { title: 'CryptoHub' });
 })
 
 

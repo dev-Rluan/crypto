@@ -1,0 +1,135 @@
+/* ─── Base ─────────────────────────────────────────────── */
+body {
+    background-color: #f0f2f5;
+    min-height: 100vh;
+}
+
+.navbar-brand {
+    font-size: 1.1rem;
+    letter-spacing: -0.3px;
+}
+
+/* ─── Tab card — remove top-left radius to flush with tabs ─ */
+.tab-card {
+    border-top-left-radius: 0;
+}
+
+.nav-tabs .nav-link {
+    color: #495057;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* ─── Form labels ─────────────────────────────────────── */
+.form-label {
+    font-weight: 500;
+    font-size: 0.82rem;
+    margin-bottom: 0.2rem;
+    color: #343a40;
+}
+
+/* ─── Monospace inputs / outputs ─────────────────────── */
+.mono {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+}
+
+.result-area {
+    background-color: #f8f9fa;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    word-break: break-all;
+}
+
+.result-area.is-valid  { border-color: #198754; background-color: #f0fdf4; }
+.result-area.is-invalid { border-color: #dc3545; background-color: #fff5f5; }
+
+/* ─── Result header row ───────────────────────────────── */
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+/* ─── History sidebar ────────────────────────────────── */
+.history-sticky {
+    position: sticky;
+    top: 1rem;
+}
+
+.history-card {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 5rem);
+}
+
+.history-body {
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* ─── History items ───────────────────────────────────── */
+.history-item {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 0.78rem;
+    transition: background-color 0.1s ease;
+    cursor: default;
+}
+
+.history-item:hover {
+    background-color: #f8f9fa;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-item .snippet {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.72rem;
+    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    color: #6c757d;
+}
+
+.history-item .snippet.out {
+    color: #212529;
+    font-weight: 600;
+}
+
+.history-item .ts {
+    font-size: 0.68rem;
+    color: #adb5bd;
+    margin-top: 0.15rem;
+}
+
+/* ─── Tiny button ─────────────────────────────────────── */
+.btn-xs {
+    padding: 0.05rem 0.3rem;
+    font-size: 0.7rem;
+    line-height: 1.3;
+    border-radius: 0.2rem;
+}
+
+/* ─── Empty history placeholder ──────────────────────── */
+.history-empty {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: #ced4da;
+    font-size: 0.85rem;
+}
+
+/* ─── Responsive: history moves below on mobile ──────── */
+@media (max-width: 991.98px) {
+    .history-sticky {
+        position: static;
+    }
+    .history-card {
+        max-height: 380px;
+    }
+}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoHub — 암복호화 통합 도구</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid px-3">
+        <span class="navbar-brand fw-bold mb-0">
+            🔐 CryptoHub
+            <span class="badge bg-secondary fw-normal ms-2" style="font-size:0.6rem;vertical-align:middle;">암복호화 통합 도구</span>
+        </span>
+    </div>
+</nav>
+
+<div class="container-fluid py-3 px-3 px-lg-4">
+    <div class="row g-3">
+
+        <!-- ═══════════════════════════ MAIN PANEL ═══════════════════════════ -->
+        <div class="col-lg-8">
+
+            <ul class="nav nav-tabs" id="algoTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-aes" type="button">AES</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-des" type="button">DES / 3DES</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-encoding" type="button">Base64 / Hex</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hash" type="button">Hash</button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+
+                <!-- ──────────── AES ──────────── -->
+                <div class="tab-pane fade show active" id="tab-aes" role="tabpanel">
+                    <div class="card tab-card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="aesInput">입력 텍스트</label>
+                                <textarea class="form-control mono" id="aesInput" rows="4"
+                                    placeholder="암호화할 평문 또는 복호화할 암호문을 입력하세요…"></textarea>
+                            </div>
+
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="aesKey">키 (Key)</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control mono" id="aesKey" placeholder="암호화 키 입력">
+                                        <button class="btn btn-outline-secondary" type="button" title="랜덤 키 생성"
+                                            onclick="generateRandom('aesKey', parseInt(document.getElementById('aesKeySize').value))">⚙</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="aesIv">IV <span class="text-muted fw-normal">(ECB 모드 제외)</span></label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control mono" id="aesIv" placeholder="초기화 벡터 (비우면 0으로 패딩)">
+                                        <button class="btn btn-outline-secondary" type="button" title="랜덤 IV 생성"
+                                            onclick="generateRandom('aesIv', 16)">⚙</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6 col-sm-4 col-md-2">
+                                    <label class="form-label" for="aesKeySize">키 사이즈</label>
+                                    <select class="form-select form-select-sm" id="aesKeySize">
+                                        <option value="16">128 bit</option>
+                                        <option value="24">192 bit</option>
+                                        <option value="32" selected>256 bit</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-2">
+                                    <label class="form-label" for="aesMode">모드</label>
+                                    <select class="form-select form-select-sm" id="aesMode">
+                                        <option value="CBC" selected>CBC</option>
+                                        <option value="ECB">ECB</option>
+                                        <option value="CFB">CFB</option>
+                                        <option value="OFB">OFB</option>
+                                        <option value="CTR">CTR</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-3">
+                                    <label class="form-label" for="aesPadding">패딩</label>
+                                    <select class="form-select form-select-sm" id="aesPadding">
+                                        <option value="Pkcs7" selected>PKCS7</option>
+                                        <option value="ZeroPadding">Zero</option>
+                                        <option value="NoPadding">None</option>
+                                        <option value="Iso10126">ISO 10126</option>
+                                        <option value="AnsiX923">ANSI X.923</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-2">
+                                    <label class="form-label" for="aesKeyType">키 타입</label>
+                                    <select class="form-select form-select-sm" id="aesKeyType">
+                                        <option value="utf8" selected>UTF-8</option>
+                                        <option value="hex">Hex</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-3">
+                                    <label class="form-label" for="aesOutputFmt">출력 포맷</label>
+                                    <select class="form-select form-select-sm" id="aesOutputFmt">
+                                        <option value="base64" selected>Base64</option>
+                                        <option value="hex">Hex</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 flex-wrap mb-3">
+                                <button class="btn btn-primary btn-sm" onclick="aesEncrypt()">🔒 암호화</button>
+                                <button class="btn btn-success btn-sm" onclick="aesDecrypt()">🔓 복호화</button>
+                                <button class="btn btn-outline-secondary btn-sm ms-auto" onclick="clearFields('aesInput','aesResult')">초기화</button>
+                            </div>
+
+                            <div class="result-header">
+                                <label class="form-label mb-0">결과</label>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="copyResult('aesResult')">📋 복사</button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="useAsInput('aesResult','aesInput')">↑ 입력으로</button>
+                                </div>
+                            </div>
+                            <textarea class="form-control mono result-area" id="aesResult" rows="4" readonly
+                                placeholder="결과가 여기에 표시됩니다…"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ──────────── DES / 3DES ──────────── -->
+                <div class="tab-pane fade" id="tab-des" role="tabpanel">
+                    <div class="card tab-card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="desInput">입력 텍스트</label>
+                                <textarea class="form-control mono" id="desInput" rows="4"
+                                    placeholder="암호화할 평문 또는 복호화할 암호문을 입력하세요…"></textarea>
+                            </div>
+
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="desKey">키 (Key)</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control mono" id="desKey"
+                                            placeholder="DES: 8바이트 / 3DES: 24바이트">
+                                        <button class="btn btn-outline-secondary" type="button" title="랜덤 키 생성"
+                                            onclick="generateDesRandom('desKey')">⚙</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="desIv">IV <span class="text-muted fw-normal">(ECB 모드 제외, 8바이트)</span></label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control mono" id="desIv" placeholder="초기화 벡터 (비우면 0으로 패딩)">
+                                        <button class="btn btn-outline-secondary" type="button" title="랜덤 IV 생성"
+                                            onclick="generateRandom('desIv', 8)">⚙</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6 col-sm-3">
+                                    <label class="form-label" for="desAlgo">알고리즘</label>
+                                    <select class="form-select form-select-sm" id="desAlgo">
+                                        <option value="DES" selected>DES</option>
+                                        <option value="3DES">3DES (TripleDES)</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <label class="form-label" for="desMode">모드</label>
+                                    <select class="form-select form-select-sm" id="desMode">
+                                        <option value="CBC" selected>CBC</option>
+                                        <option value="ECB">ECB</option>
+                                        <option value="CFB">CFB</option>
+                                        <option value="OFB">OFB</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <label class="form-label" for="desPadding">패딩</label>
+                                    <select class="form-select form-select-sm" id="desPadding">
+                                        <option value="Pkcs7" selected>PKCS7</option>
+                                        <option value="ZeroPadding">Zero</option>
+                                        <option value="NoPadding">None</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-sm-3">
+                                    <label class="form-label" for="desOutputFmt">출력 포맷</label>
+                                    <select class="form-select form-select-sm" id="desOutputFmt">
+                                        <option value="base64" selected>Base64</option>
+                                        <option value="hex">Hex</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 flex-wrap mb-3">
+                                <button class="btn btn-primary btn-sm" onclick="desEncrypt()">🔒 암호화</button>
+                                <button class="btn btn-success btn-sm" onclick="desDecrypt()">🔓 복호화</button>
+                                <button class="btn btn-outline-secondary btn-sm ms-auto" onclick="clearFields('desInput','desResult')">초기화</button>
+                            </div>
+
+                            <div class="result-header">
+                                <label class="form-label mb-0">결과</label>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="copyResult('desResult')">📋 복사</button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="useAsInput('desResult','desInput')">↑ 입력으로</button>
+                                </div>
+                            </div>
+                            <textarea class="form-control mono result-area" id="desResult" rows="4" readonly
+                                placeholder="결과가 여기에 표시됩니다…"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ──────────── Base64 / Hex ──────────── -->
+                <div class="tab-pane fade" id="tab-encoding" role="tabpanel">
+                    <div class="card tab-card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="encodingInput">입력 텍스트</label>
+                                <textarea class="form-control mono" id="encodingInput" rows="5"
+                                    placeholder="인코딩/디코딩할 텍스트를 입력하세요…"></textarea>
+                            </div>
+
+                            <div class="d-flex gap-2 flex-wrap mb-3">
+                                <button class="btn btn-primary btn-sm" onclick="base64Encode()">Base64 인코딩</button>
+                                <button class="btn btn-success btn-sm" onclick="base64Decode()">Base64 디코딩</button>
+                                <span class="vr d-none d-sm-inline-block"></span>
+                                <button class="btn btn-info btn-sm text-white" onclick="hexEncode()">Hex 인코딩</button>
+                                <button class="btn btn-warning btn-sm" onclick="hexDecode()">Hex 디코딩</button>
+                                <button class="btn btn-outline-secondary btn-sm ms-auto" onclick="clearFields('encodingInput','encodingResult')">초기화</button>
+                            </div>
+
+                            <div class="result-header">
+                                <label class="form-label mb-0">결과</label>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="copyResult('encodingResult')">📋 복사</button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="useAsInput('encodingResult','encodingInput')">↑ 입력으로</button>
+                                </div>
+                            </div>
+                            <textarea class="form-control mono result-area" id="encodingResult" rows="5" readonly
+                                placeholder="결과가 여기에 표시됩니다…"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ──────────── Hash ──────────── -->
+                <div class="tab-pane fade" id="tab-hash" role="tabpanel">
+                    <div class="card tab-card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="hashInput">입력 텍스트</label>
+                                <textarea class="form-control mono" id="hashInput" rows="4"
+                                    placeholder="해시할 텍스트를 입력하세요…"></textarea>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label" for="hashAlgo">알고리즘</label>
+                                    <select class="form-select form-select-sm" id="hashAlgo">
+                                        <option value="MD5">MD5</option>
+                                        <option value="SHA1">SHA-1</option>
+                                        <option value="SHA256" selected>SHA-256</option>
+                                        <option value="SHA512">SHA-512</option>
+                                        <option value="SHA3-256">SHA3-256</option>
+                                        <option value="SHA3-512">SHA3-512</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label" for="hmacKey">
+                                        HMAC 키
+                                        <span class="text-muted fw-normal">(선택 — 입력 시 HMAC으로 계산)</span>
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm mono" id="hmacKey"
+                                        placeholder="비워두면 일반 해시">
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 flex-wrap mb-3">
+                                <button class="btn btn-primary btn-sm" onclick="computeHash()">🔍 해시 계산</button>
+                                <button class="btn btn-outline-secondary btn-sm ms-auto" onclick="clearFields('hashInput','hashResult')">초기화</button>
+                            </div>
+
+                            <div class="result-header">
+                                <label class="form-label mb-0">결과</label>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="copyResult('hashResult')">📋 복사</button>
+                            </div>
+                            <textarea class="form-control mono result-area" id="hashResult" rows="2" readonly
+                                placeholder="해시 결과가 여기에 표시됩니다…"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /tab-content -->
+        </div><!-- /col-lg-8 -->
+
+        <!-- ═══════════════════════════ HISTORY PANEL ═══════════════════════════ -->
+        <div class="col-lg-4">
+            <div class="history-sticky">
+                <div class="card history-card">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                        <span class="fw-semibold">
+                            히스토리
+                            <span class="badge bg-secondary ms-1" id="historyCount">0</span>
+                        </span>
+                        <button class="btn btn-sm btn-outline-danger py-0" onclick="HistoryModule.clear()">전체 삭제</button>
+                    </div>
+                    <div class="history-body">
+                        <div id="historyList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /row -->
+</div><!-- /container-fluid -->
+
+<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/cryptoApp.js"></script>
+</body>
+</html>
